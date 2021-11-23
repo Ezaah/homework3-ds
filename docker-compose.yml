@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+  inventory:
+    image: ubuntu:20.04
+    depends_on:
+      - postgres
+      - postgres-replica
+    ports:
+      - "8000:8000"
+    tty: true
+  
+  inventory-replica1:
+    image: ubuntu:20.04
+    depends_on:
+      - postgres
+      - postgres-replica
+    ports:
+      - "8001:8000"
+    tty: true
+
+  inventory-replica2:
+    image: ubuntu:20.04
+    depends_on:
+      - postgres
+      - postgres-replica
+    ports:
+      - "8002:8000"
+    tty: true
+
+  postgres:
+    image: bitnami/postgresql:14
+    env_file:
+      - ./.docker/postgres/.env
+    volumes:
+      - postgres14:/bitnami/postgresql
+    ports:
+      - "5432"
+
+  postgres-replica:
+    image: bitnami/postgresql:14
+    env_file:
+      - ./.docker/postgres/replica.env
+    depends_on:
+      - postgres
+    ports:
+      - "5432"
+
+  nginx:
+    image: nginx
+    depends_on:
+      - inventory
+      - inventory-replica1
+      - inventory-replica2
+    env_file:
+      - ./.docker/nginx/.env
+    volumes:
+      - ./.docker/nginx/templates:/etc/nginx/templates
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres14:
