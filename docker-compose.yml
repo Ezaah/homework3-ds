@@ -2,36 +2,48 @@ version: "3"
 
 services:
   inventory:
-    image: ubuntu:20.04
+    container_name: inventory
+    build:
+      context: .
+      dockerfile: .docker/inventory/Dockerfile
+    volumes:
+      - ./inventory:/usr/src/inventory
     depends_on:
       - postgres
       - postgres-replica
     ports:
       - "8000:8000"
-    tty: true
   
   inventory-replica1:
-    image: ubuntu:20.04
+    container_name: inventory_replica1
+    build:
+      context: .
+      dockerfile: .docker/inventory/Dockerfile
+    volumes:
+      - ./inventory:/usr/src/inventory
     depends_on:
       - postgres
       - postgres-replica
     ports:
       - "8001:8000"
-    tty: true
 
   inventory-replica2:
-    image: ubuntu:20.04
+    container_name: inventory_replica2
+    build:
+      context: .
+      dockerfile: .docker/inventory/Dockerfile
+    volumes:
+      - ./inventory:/usr/src/inventory
     depends_on:
       - postgres
       - postgres-replica
     ports:
       - "8002:8000"
-    tty: true
 
   postgres:
     image: bitnami/postgresql:14
     env_file:
-      - ./.docker/postgres/.env
+      - ./.docker/postgres/master.env
     volumes:
       - postgres14:/bitnami/postgresql
     ports:
@@ -53,7 +65,7 @@ services:
       - inventory-replica1
       - inventory-replica2
     env_file:
-      - ./.docker/nginx/.env
+      - ./.docker/nginx/nginx.env
     volumes:
       - ./.docker/nginx/templates:/etc/nginx/templates
     ports:

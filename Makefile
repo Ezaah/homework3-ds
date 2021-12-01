@@ -7,7 +7,7 @@ help:
 .PHONY: up
 up: ## run the project 
 	@echo "Running project..."
-	@docker-compose run --service-ports --rm -d nginx || true
+	@docker-compose up --attach-dependencies nginx || true
 
 .PHONY: stop
 stop: ## stop Docker containers without removing them
