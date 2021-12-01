@@ -4,10 +4,8 @@ ENV NODE_ENV development
 
 WORKDIR /usr/src/inventory
 
-COPY inventory/package.json ./
-COPY inventory/package-lock.json ./
-RUN npm install
 COPY inventory .
+RUN npm install
 
 EXPOSE 8000
 USER node

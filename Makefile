@@ -6,8 +6,10 @@ help:
 
 .PHONY: up
 up: ## run the project 
+	@echo "Checking if inventory dependencies exists..."
+	@if [ ! -d "./inventory/node_modules" ]; then $(MAKE) install; fi
 	@echo "Running project..."
-	@docker-compose up --attach-dependencies nginx || true
+	@docker-compose up
 
 .PHONY: stop
 stop: ## stop Docker containers without removing them
@@ -35,3 +37,9 @@ rebuild: ## rebuild backend Docker image
 rebuild-full: ## rebuild backend Docker image and wipes volumes
 	@docker-compose down --remove-orphans
 	@docker-compose build --no-cache
+
+
+.PHONY: install
+install: ## Installs node dependencies for inventory
+	@echo "Installing dependencies..."
+	@docker-compose run --rm --no-deps inventory npm install
