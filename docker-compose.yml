@@ -46,6 +46,7 @@ services:
       - ./.docker/postgres/master.env
     volumes:
       - postgres14:/bitnami/postgresql
+      - ./.docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432"
 
