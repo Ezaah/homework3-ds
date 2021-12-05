@@ -22,6 +22,28 @@ Por defecto cuando se crea por primera vez postgres en docker, se inicializa la 
 
 ### Información Adicional
 
+Uso de postman para comprobación de consultas:
+
+Hacer un post para insertar:
+
+http://localhost:8080/insertar
+
+Formato raw de ejemplo:
+{
+      "nombre": "ejemplo",
+      "precio": 123454
+}
+
+Obtener información de un id especifico:
+
+Hacer un get a la ruta:
+    http://localhost:8080/obtener/1
+
+Obtener todos:
+
+Hacer un get a la ruta:
+    http://localhost:8080/obtener_todo
+
 
 ##### Comandos Make
 
@@ -47,3 +69,9 @@ Este listado se puede visualizar ejecutando `make help`
 | NGINX | [nginx](https://hub.docker.com/_/nginx) | Servicio NGINX con balanceador de carga |
 | Postgres & Postgres-replica | [bitnami/postgresql](https://hub.docker.com/r/bitnami/postgresql/) | Servicios de PostgresQL con replicación sincronica |
 | Inventory | [Node Dockerfile](./.docker/inventory/Dockerfile) | Microservicio de inventario en Node | 
+
+
+##### Funcionamiento general
+
+Dentro de postgres.js en el directorio /inventory  se explica que los insert se realizan a la base master
+y los select se hacen a la replica, de esta forma, se comprueba que los datos se estan replicando.
